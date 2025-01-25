@@ -39,7 +39,7 @@ jobs:
           dotnet build
           export PATH="${HTTPRUN_DIR}/${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}:$PATH"
           # export PATH="${HTTPRUN_PATH}:$PATH"
-          cd "${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}"
+          cd "${HTTPRUN_PATH}"
           # cd "${HTTPRUN_PATH}"
           ${{ env.HTTPRUN_PATH }}="$(pwd)/httprun"
       - name: Checking code
