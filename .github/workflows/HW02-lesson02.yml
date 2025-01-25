@@ -40,7 +40,7 @@ jobs:
       - name: Running the service
         run: |
           cd "${WORK_DIR}"
-          dotnet ru n --project "${MAIN_PROJECT}"
+          dotnet run --project "${MAIN_PROJECT}"
       - name: Test
         run: |
           cd "${WORK_DIR}"
