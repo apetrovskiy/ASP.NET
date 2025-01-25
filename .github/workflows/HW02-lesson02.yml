@@ -12,6 +12,9 @@ env:
   WORK_DIR: Homeworks/Base
   SOLUTION_FILE: src/PromoCodeFactory.sln
   MAIN_PROJECT: src/PromoCodeFactory.WebHost/PromoCodeFactory.WebHost.csproj
+  HTTPRUN_DIR: "httprun"
+  HTTPRUN_SOLUTION_DIR: "${HTTPRUN_DIR}/httprun-main-202311061730"
+  HTTPRUN_PATH: "${HTTPRUN_SOLUTION_DIR}/src/HttpExecutor/bin/Debug/net5.0/httprun"
 
 jobs:
   build:
@@ -19,12 +22,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Installing netcat
-        run: sudo apt update && sudo apt install netcat-openbsd
+      # - name: Installing netcat
+      #   run: sudo apt update && sudo apt install netcat-openbsd
+      - name: Installing curl
+        run: sudo apt update && sudo apt install curl
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
+      - name: building httprun
+        run: |
+          mkdir -p "${HTTPRUN_DIR}"
+          cd "${HTTPRUN_DIR}"
+          curl -L https://github.com/api1st/httprun/archive/refs/tags/main-202311061730.tar.gz | tar zx
+          cd "${HTTPRUN_SOLUTION_DIR}"
+          dotnet build
+          export PATH="${HTTPRUN_PATH}:$PATH"
       - name: Checking code
         run: |
           cd "${WORK_DIR}"
@@ -37,13 +50,13 @@ jobs:
         run: |
           cd "${WORK_DIR}"
           dotnet build --no-restore "${SOLUTION_FILE}"
-      - name: Running the service
+      - name: Running the service and checking the result
         run: |
           cd "${WORK_DIR}"
-          dotnet run --project "${MAIN_PROJECT}" &
-          sleep 20s
-      - name: Test
-        run: |
-          cd "${WORK_DIR}"
-          nc localhost 5000 < tests/requests.http
-          # dotnet test --no-build --verbosity normal
+          dotnet run --project "${MAIN_PROJECT}" & { httprun tests/requests.http; }
+          # sleep 20s
+      # - name: Test
+      #   run: |
+      #     cd "${WORK_DIR}"
+      #     # nc localhost 5000 < tests/requests.http
+      #     # dotnet test --no-build --verbosity normal
