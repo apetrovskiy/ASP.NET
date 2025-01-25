@@ -88,7 +88,9 @@ jobs:
       # - run: npm ci
       # - run: npm run build --if-present
       # - run: npm test
-      - run: npm install httpyac
+      - run: |
+          npm install -g httpyac
+          httpyac --version
       - run: |
           cd "${WORK_DIR}"
           httpyac send tests/requests.http
