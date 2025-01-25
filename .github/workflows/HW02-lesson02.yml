@@ -38,7 +38,7 @@ jobs:
           cd "${HTTPRUN_SOLUTION_DIR}"
           pwd
           dotnet build
-          export PATH="${HTTPRUN}/${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}:$PATH"
+          export PATH="../../${HTTPRUN}/${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}:$PATH"
           echo "PATH=${PATH}"
           # export PATH="${HTTPRUN_PATH}:$PATH"
           echo "cd ${HTTPRUN_PATH}"
@@ -68,7 +68,7 @@ jobs:
       - name: Running the service and checking the result
         run: |
           cd "${WORK_DIR}"
-          dotnet run --project "${MAIN_PROJECT}" & { "${HTTPRUN}/${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}/${HTTPRUN}" tests/requests.http; }
+          dotnet run --project "${MAIN_PROJECT}" & { "../../${HTTPRUN}/${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}/${HTTPRUN}" tests/requests.http; }
           # sleep 20s
       # - name: Test
       #   run: |
