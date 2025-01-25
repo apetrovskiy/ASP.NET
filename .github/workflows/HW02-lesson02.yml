@@ -50,8 +50,9 @@ jobs:
           # env.HTTPRUN_PATH="$(pwd)/httprun"
           # echo "HTTPRUN_PATH=${{ env.HTTPRUN_PATH }}"
           export HTTPRUN_PATH="$(pwd)/httprun"
-          echo "HTTPRUN_PATH=${HTTPRUN_PATH}"
-          echo "HTTPRUN_PATH=${{ env.HTTPRUN_PATH }}"
+          export HTTPRUN_EXE_PATH="$(pwd)/httprun"
+          echo "HTTPRUN_EXE_PATH=${HTTPRUN_PATH}"
+          echo "HTTPRUN_EXE_PATH=${{ env.HTTPRUN_PATH }}"
       - name: Checking code
         run: |
           cd "${WORK_DIR}"
@@ -67,7 +68,7 @@ jobs:
       - name: Running the service and checking the result
         run: |
           cd "${WORK_DIR}"
-          dotnet run --project "${MAIN_PROJECT}" & { ${{ env.HTTPRUN_PATH }} tests/requests.http; }
+          dotnet run --project "${MAIN_PROJECT}" & { ${{ HTTPRUN_PATH }} tests/requests.http; }
           # sleep 20s
       # - name: Test
       #   run: |
