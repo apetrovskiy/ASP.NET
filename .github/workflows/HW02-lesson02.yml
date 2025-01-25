@@ -14,7 +14,7 @@ env:
   MAIN_PROJECT: src/PromoCodeFactory.WebHost/PromoCodeFactory.WebHost.csproj
   HTTPRUN_DIR: "httprun"
   HTTPRUN_SOLUTION_DIR: "httprun-main-202311061730"
-  HTTPRUN_PATH: "src/HttpExecutor/bin/Debug/net5.0/httprun"
+  HTTPRUN_PATH: "src/HttpExecutor/bin/Debug/net5.0"
 
 jobs:
   build:
