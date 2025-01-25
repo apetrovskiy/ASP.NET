@@ -44,5 +44,5 @@ jobs:
       - name: Test
         run: |
           cd "${WORK_DIR}"
-          # dotnet test --no-build --verbosity normal
           nc localhost 5000 < tests/requests.http
+          # dotnet test --no-build --verbosity normal
