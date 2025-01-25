@@ -47,7 +47,10 @@ jobs:
           # cd "${HTTPRUN_PATH}"
           HTTPRUN_PATH="$(pwd)/httprun"
           echo "HTTPRUN_PATH=${HTTPRUN_PATH}"
-          env.HTTPRUN_PATH="$(pwd)/httprun"
+          # env.HTTPRUN_PATH="$(pwd)/httprun"
+          # echo "HTTPRUN_PATH=${{ env.HTTPRUN_PATH }}"
+          export HTTPRUN_PATH="$(pwd)/httprun"
+          echo "HTTPRUN_PATH=${HTTPRUN_PATH}"
           echo "HTTPRUN_PATH=${{ env.HTTPRUN_PATH }}"
       - name: Checking code
         run: |
