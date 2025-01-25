@@ -12,7 +12,7 @@ env:
   WORK_DIR: Homeworks/Base
   SOLUTION_FILE: src/PromoCodeFactory.sln
   MAIN_PROJECT: src/PromoCodeFactory.WebHost/PromoCodeFactory.WebHost.csproj
-  HTTPRUN_DIR: "httprun"
+  HTTPRUN: "httprun"
   HTTPRUN_SOLUTION_DIR: "httprun-main-202311061730"
   HTTPRUN_PATH: "src/HttpExecutor/bin/Debug/net5.0"
 
@@ -32,13 +32,13 @@ jobs:
           dotnet-version: 8.0.x
       - name: building httprun
         run: |
-          mkdir -p "${HTTPRUN_DIR}"
-          cd "${HTTPRUN_DIR}"
+          mkdir -p "${HTTPRUN}"
+          cd "${HTTPRUN}"
           curl -L https://github.com/api1st/httprun/archive/refs/tags/main-202311061730.tar.gz | tar zx
           cd "${HTTPRUN_SOLUTION_DIR}"
           pwd
           dotnet build
-          export PATH="${HTTPRUN_DIR}/${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}:$PATH"
+          export PATH="${HTTPRUN}/${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}:$PATH"
           echo "PATH=${PATH}"
           # export PATH="${HTTPRUN_PATH}:$PATH"
           echo "cd ${HTTPRUN_PATH}"
@@ -68,7 +68,7 @@ jobs:
       - name: Running the service and checking the result
         run: |
           cd "${WORK_DIR}"
-          dotnet run --project "${MAIN_PROJECT}" & { ${HTTPRUN_EXE_PATH} tests/requests.http; }
+          dotnet run --project "${MAIN_PROJECT}" & { "${HTTPRUN}/${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}/${HTTPRUN}" tests/requests.http; }
           # sleep 20s
       # - name: Test
       #   run: |
