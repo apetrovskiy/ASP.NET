@@ -68,7 +68,7 @@ jobs:
       - name: Running the service and checking the result
         run: |
           cd "${WORK_DIR}"
-          dotnet run --project "${MAIN_PROJECT}" & { ${{ HTTPRUN_PATH }} tests/requests.http; }
+          dotnet run --project "${MAIN_PROJECT}" & { ${HTTPRUN_EXE_PATH} tests/requests.http; }
           # sleep 20s
       # - name: Test
       #   run: |
