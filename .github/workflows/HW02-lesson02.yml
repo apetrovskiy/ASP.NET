@@ -90,5 +90,5 @@ jobs:
       # - run: npm test
       - run: npm install httpyac
       - run: |
-        cd "${WORK_DIR}"
-        httpyac send tests/requests.http
+          cd "${WORK_DIR}"
+          httpyac send tests/requests.http
