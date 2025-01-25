@@ -8,6 +8,11 @@ on:
     branches: ["develop"]
   workflow_dispatch:
 
+env:
+  WORK_DIR: Homeworks/Base
+  SOLUTION_FILE: src/PromoCodeFactory.sln
+  MAIN_PROJECT: src/PromoCodeFactory.WebHost/PromoCodeFactory.WebHost.csproj
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,18 +27,22 @@ jobs:
           dotnet-version: 8.0.x
       - name: Checking code
         run: |
-          cd Homeworks/Base
-          dotnet format --verify-no-changes -v d
+          cd "${WORK_DIR}"
+          dotnet format --verify-no-changes -v d "${SOLUTION_FILE}"
       - name: Restore dependencies
         run: |
-          cd Homeworks/Base
-          dotnet restore
+          cd "${WORK_DIR}"
+          dotnet restore "${SOLUTION_FILE}"
       - name: Build
         run: |
-          cd Homeworks/Base
-          dotnet build --no-restore
+          cd "${WORK_DIR}"
+          dotnet build --no-restore "${SOLUTION_FILE}"
+      - name: Running the service
+        run: |
+          cd "${WORK_DIR}"
+          dotnet ru n --project "${MAIN_PROJECT}"
       - name: Test
         run: |
-          cd Homeworks/Base
+          cd "${WORK_DIR}"
           # dotnet test --no-build --verbosity normal
           nc localhost 5000 < tests/requests.http
