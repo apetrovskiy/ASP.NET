@@ -1,0 +1,39 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  pull_request:
+    branches: ["develop"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Installing netcat
+        run: sudo apt update && sudo apt install netcat-openbsd
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Checking code
+        run: |
+          cd Homeworks/Base
+          dotnet format --verify-no-changes -v d
+      - name: Restore dependencies
+        run: |
+          cd Homeworks/Base
+          dotnet restore
+      - name: Build
+        run: |
+          cd Homeworks/Base
+          dotnet build --no-restore
+      - name: Test
+        run: |
+          cd Homeworks/Base
+          # dotnet test --no-build --verbosity normal
+          nc localhost 5000 < tests/requests.http
