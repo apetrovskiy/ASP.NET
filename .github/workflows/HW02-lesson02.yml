@@ -13,8 +13,8 @@ env:
   SOLUTION_FILE: src/PromoCodeFactory.sln
   MAIN_PROJECT: src/PromoCodeFactory.WebHost/PromoCodeFactory.WebHost.csproj
   HTTPRUN_DIR: "httprun"
-  HTTPRUN_SOLUTION_DIR: "${{ HTTPRUN_DIR }}/httprun-main-202311061730"
-  HTTPRUN_PATH: "${{ HTTPRUN_SOLUTION_DIR }}/src/HttpExecutor/bin/Debug/net5.0"
+  HTTPRUN_SOLUTION_DIR: "httprun-main-202311061730"
+  HTTPRUN_PATH: "src/HttpExecutor/bin/Debug/net5.0"
 
 jobs:
   build:
@@ -37,10 +37,10 @@ jobs:
           curl -L https://github.com/api1st/httprun/archive/refs/tags/main-202311061730.tar.gz | tar zx
           cd "${HTTPRUN_SOLUTION_DIR}"
           dotnet build
-          # export PATH="${HTTPRUN_DIR}/${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}:$PATH"
-          export PATH="${HTTPRUN_PATH}:$PATH"
-          # cd "${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}"
-          cd "${HTTPRUN_PATH}"
+          export PATH="${HTTPRUN_DIR}/${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}:$PATH"
+          # export PATH="${HTTPRUN_PATH}:$PATH"
+          cd "${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}"
+          # cd "${HTTPRUN_PATH}"
           ${{ env.HTTPRUN_PATH }}="$(pwd)/httprun"
       - name: Checking code
         run: |
