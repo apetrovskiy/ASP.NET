@@ -36,12 +36,17 @@ jobs:
           cd "${HTTPRUN_DIR}"
           curl -L https://github.com/api1st/httprun/archive/refs/tags/main-202311061730.tar.gz | tar zx
           cd "${HTTPRUN_SOLUTION_DIR}"
+          pwd
           dotnet build
           export PATH="${HTTPRUN_DIR}/${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}:$PATH"
+          echo "PATH=${PATH}"
           # export PATH="${HTTPRUN_PATH}:$PATH"
+          echo "cd ${HTTPRUN_PATH}"
           cd "${HTTPRUN_PATH}"
+          pwd
           # cd "${HTTPRUN_PATH}"
-          ${{ env.HTTPRUN_PATH }}="$(pwd)/httprun"
+          HTTPRUN_PATH="$(pwd)/httprun"
+          echo "HTTPRUN_PATH=${HTTPRUN_PATH}"
       - name: Checking code
         run: |
           cd "${WORK_DIR}"
