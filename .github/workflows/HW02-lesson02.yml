@@ -67,6 +67,9 @@ jobs:
           dotnet build --no-restore "${SOLUTION_FILE}"
       - name: Running the service and checking the result
         run: |
+          #
+          hostname
+          #
           cd "${WORK_DIR}"
           dotnet run --project "${MAIN_PROJECT}" & { "../../${HTTPRUN}/${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}/${HTTPRUN}" tests/read.http; }
           # sleep 20s
@@ -91,6 +94,9 @@ jobs:
       - run: |
           npm install -g httpyac
           httpyac --version
+          #
+          hostname
+          #
           sleep 2m
       - name: Checking existing methods GetEmployeesAsync and GetEmployeeByIdAsync
         run: |
