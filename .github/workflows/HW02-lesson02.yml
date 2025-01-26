@@ -91,6 +91,7 @@ jobs:
       - run: |
           npm install -g httpyac
           httpyac --version
+          sleep 2m
       - name: Checking existing methods GetEmployeesAsync and GetEmployeeByIdAsync
         run: |
           cd "${WORK_DIR}"
