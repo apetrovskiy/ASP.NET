@@ -30,29 +30,40 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
-      - name: building httprun
-        run: |
-          mkdir -p "${HTTPRUN}"
-          cd "${HTTPRUN}"
-          curl -L https://github.com/api1st/httprun/archive/refs/tags/main-202311061730.tar.gz | tar zx
-          cd "${HTTPRUN_SOLUTION_DIR}"
-          pwd
-          dotnet build
-          export PATH="../../${HTTPRUN}/${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}:$PATH"
-          echo "PATH=${PATH}"
-          # export PATH="${HTTPRUN_PATH}:$PATH"
-          echo "cd ${HTTPRUN_PATH}"
-          cd "${HTTPRUN_PATH}"
-          pwd
-          # cd "${HTTPRUN_PATH}"
-          HTTPRUN_PATH="$(pwd)/httprun"
-          echo "HTTPRUN_PATH=${HTTPRUN_PATH}"
-          # env.HTTPRUN_PATH="$(pwd)/httprun"
-          # echo "HTTPRUN_PATH=${{ env.HTTPRUN_PATH }}"
-          export HTTPRUN_PATH="$(pwd)/httprun"
-          export HTTPRUN_EXE_PATH="$(pwd)/httprun"
-          echo "HTTPRUN_EXE_PATH=${HTTPRUN_PATH}"
-          echo "HTTPRUN_EXE_PATH=${{ env.HTTPRUN_PATH }}"
+      # - name: building httprun
+      #   run: |
+      #     mkdir -p "${HTTPRUN}"
+      #     cd "${HTTPRUN}"
+      #     curl -L https://github.com/api1st/httprun/archive/refs/tags/main-202311061730.tar.gz | tar zx
+      #     cd "${HTTPRUN_SOLUTION_DIR}"
+      #     pwd
+      #     dotnet build
+      #     export PATH="../../${HTTPRUN}/${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}:$PATH"
+      #     echo "PATH=${PATH}"
+      #     # export PATH="${HTTPRUN_PATH}:$PATH"
+      #     echo "cd ${HTTPRUN_PATH}"
+      #     cd "${HTTPRUN_PATH}"
+      #     pwd
+      #     # cd "${HTTPRUN_PATH}"
+      #     HTTPRUN_PATH="$(pwd)/httprun"
+      #     echo "HTTPRUN_PATH=${HTTPRUN_PATH}"
+      #     # env.HTTPRUN_PATH="$(pwd)/httprun"
+      #     # echo "HTTPRUN_PATH=${{ env.HTTPRUN_PATH }}"
+      #     export HTTPRUN_PATH="$(pwd)/httprun"
+      #     export HTTPRUN_EXE_PATH="$(pwd)/httprun"
+      #     echo "HTTPRUN_EXE_PATH=${HTTPRUN_PATH}"
+      #     echo "HTTPRUN_EXE_PATH=${{ env.HTTPRUN_PATH }}"
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      - run: |
+          npm install -g httpyac
+          httpyac --version
+          #
+          hostname
+          #
+          # sleep 2m
       - name: Checking code
         run: |
           cd "${WORK_DIR}"
@@ -71,9 +82,15 @@ jobs:
           hostname
           #
           cd "${WORK_DIR}"
-          dotnet run --project "${MAIN_PROJECT}" 
-          # & { "../../${HTTPRUN}/${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}/${HTTPRUN}" tests/read.http; }
-          # sleep 20s
+          dotnet run --project "${MAIN_PROJECT}" & \
+            { \
+              httpyac send --all --insecure --output body tests/read.http; \
+              httpyac send --all --insecure --output body tests/create.http; \
+              httpyac send --all --insecure --output body tests/update.http; \
+              httpyac send --all --insecure --output body tests/delete.http; \
+            }
+      - name: Stopping the service
+        run: pkill dotnet
       # - name: Test
       #   run: |
       #     cd "${WORK_DIR}"
@@ -89,9 +106,6 @@ jobs:
         with:
           node-version: 22.x
           # cache: 'npm'
-      # - run: npm ci
-      # - run: npm run build --if-present
-      # - run: npm test
       - run: |
           npm install -g httpyac
           httpyac --version
