@@ -2,6 +2,7 @@
 # @import ./variables.http
 
 @employeeToUpdateId = "991876d5-c8e7-4a11-9c7b-cd9a54e4c32f"
+@partnerManagerRoleId = "00000000-0000-0000-0000-000000000000"
 
 ################################################## UPDATE AN EMPLOYEE ##################################################
 
@@ -16,7 +17,7 @@ Content-Type: application/json
   "email": "string",
   "roles": [
     {
-      "id": "string",
+      "id": {{partnerManagerRoleId}},
       "name": "string",
       "description": "string"
     }
