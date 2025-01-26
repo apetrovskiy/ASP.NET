@@ -89,8 +89,8 @@ jobs:
       # - run: npm run build --if-present
       # - run: npm test
       - run: |
-          # npm install -g httpyac
-          npm install httpyac
+          npm install -g httpyac
+          # npm install httpyac
           httpyac --version
       - run: |
           cd "${WORK_DIR}"
