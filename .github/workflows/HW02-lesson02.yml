@@ -71,7 +71,8 @@ jobs:
           hostname
           #
           cd "${WORK_DIR}"
-          dotnet run --project "${MAIN_PROJECT}" & { "../../${HTTPRUN}/${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}/${HTTPRUN}" tests/read.http; }
+          dotnet run --project "${MAIN_PROJECT}" 
+          # & { "../../${HTTPRUN}/${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}/${HTTPRUN}" tests/read.http; }
           # sleep 20s
       # - name: Test
       #   run: |
