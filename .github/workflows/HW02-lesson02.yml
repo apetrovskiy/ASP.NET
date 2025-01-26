@@ -101,16 +101,32 @@ jobs:
       - name: Checking existing methods GetEmployeesAsync and GetEmployeeByIdAsync
         run: |
           cd "${WORK_DIR}"
+          #
+          pwd
+          ls tests/read*
+          #
           httpyac send --all --insecure --output body tests/read.http
       - name: Checking employee creation, method PostEmployeeAsync
         run: |
           cd "${WORK_DIR}"
+          #
+          pwd
+          ls tests/read*
+          #
           httpyac send --all --insecure --output body tests/create.http
       - name: Checking employee alteration, method PutEmployeeAsync
         run: |
           cd "${WORK_DIR}"
+          #
+          pwd
+          ls tests/read*
+          #
           httpyac send --all --insecure --output body tests/update.http
       - name: Checking employee deletion, method DeleteEmployeeAsync
         run: |
           cd "${WORK_DIR}"
+          #
+          pwd
+          ls tests/read*
+          #
           httpyac send --all --insecure --output body tests/delete.http
