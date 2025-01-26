@@ -12,9 +12,6 @@ env:
   WORK_DIR: Homeworks/Base
   SOLUTION_FILE: src/PromoCodeFactory.sln
   MAIN_PROJECT: src/PromoCodeFactory.WebHost/PromoCodeFactory.WebHost.csproj
-  HTTPRUN: "httprun"
-  HTTPRUN_SOLUTION_DIR: "httprun-main-202311061730"
-  HTTPRUN_PATH: "src/HttpExecutor/bin/Debug/net5.0"
 
 jobs:
   service:
@@ -22,37 +19,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      # - name: Installing netcat
-      #   run: sudo apt update && sudo apt install netcat-openbsd
       - name: Installing curl
         run: sudo apt update && sudo apt install curl
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
-      # - name: building httprun
-      #   run: |
-      #     mkdir -p "${HTTPRUN}"
-      #     cd "${HTTPRUN}"
-      #     curl -L https://github.com/api1st/httprun/archive/refs/tags/main-202311061730.tar.gz | tar zx
-      #     cd "${HTTPRUN_SOLUTION_DIR}"
-      #     pwd
-      #     dotnet build
-      #     export PATH="../../${HTTPRUN}/${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}:$PATH"
-      #     echo "PATH=${PATH}"
-      #     # export PATH="${HTTPRUN_PATH}:$PATH"
-      #     echo "cd ${HTTPRUN_PATH}"
-      #     cd "${HTTPRUN_PATH}"
-      #     pwd
-      #     # cd "${HTTPRUN_PATH}"
-      #     HTTPRUN_PATH="$(pwd)/httprun"
-      #     echo "HTTPRUN_PATH=${HTTPRUN_PATH}"
-      #     # env.HTTPRUN_PATH="$(pwd)/httprun"
-      #     # echo "HTTPRUN_PATH=${{ env.HTTPRUN_PATH }}"
-      #     export HTTPRUN_PATH="$(pwd)/httprun"
-      #     export HTTPRUN_EXE_PATH="$(pwd)/httprun"
-      #     echo "HTTPRUN_EXE_PATH=${HTTPRUN_PATH}"
-      #     echo "HTTPRUN_EXE_PATH=${{ env.HTTPRUN_PATH }}"
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
@@ -92,57 +64,3 @@ jobs:
             }
       - name: Stopping the service
         run: pkill dotnet
-      # - name: Test
-      #   run: |
-      #     cd "${WORK_DIR}"
-      #     # nc localhost 5000 < tests/read.http
-      #     # dotnet test --no-build --verbosity normal
-
-  # tests:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Use Node.js
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: 22.x
-  #         # cache: 'npm'
-  #     - run: |
-  #         npm install -g httpyac
-  #         httpyac --version
-  #         #
-  #         hostname
-  #         #
-  #         sleep 2m
-  #     - name: Checking existing methods GetEmployeesAsync and GetEmployeeByIdAsync
-  #       run: |
-  #         cd "${WORK_DIR}"
-  #         #
-  #         pwd
-  #         ls tests/read*
-  #         #
-  #         httpyac send --all --insecure --output body tests/read.http
-  #     - name: Checking employee creation, method PostEmployeeAsync
-  #       run: |
-  #         cd "${WORK_DIR}"
-  #         #
-  #         pwd
-  #         ls tests/read*
-  #         #
-  #         httpyac send --all --insecure --output body tests/create.http
-  #     - name: Checking employee alteration, method PutEmployeeAsync
-  #       run: |
-  #         cd "${WORK_DIR}"
-  #         #
-  #         pwd
-  #         ls tests/read*
-  #         #
-  #         httpyac send --all --insecure --output body tests/update.http
-  #     - name: Checking employee deletion, method DeleteEmployeeAsync
-  #       run: |
-  #         cd "${WORK_DIR}"
-  #         #
-  #         pwd
-  #         ls tests/read*
-  #         #
-  #         httpyac send --all --insecure --output body tests/delete.http
