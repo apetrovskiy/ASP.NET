@@ -68,12 +68,12 @@ jobs:
       - name: Running the service and checking the result
         run: |
           cd "${WORK_DIR}"
-          dotnet run --project "${MAIN_PROJECT}" & { "../../${HTTPRUN}/${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}/${HTTPRUN}" tests/requests.http; }
+          dotnet run --project "${MAIN_PROJECT}" & { "../../${HTTPRUN}/${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}/${HTTPRUN}" tests/read.http; }
           # sleep 20s
       # - name: Test
       #   run: |
       #     cd "${WORK_DIR}"
-      #     # nc localhost 5000 < tests/requests.http
+      #     # nc localhost 5000 < tests/read.http
       #     # dotnet test --no-build --verbosity normal
 
   tests:
@@ -90,38 +90,20 @@ jobs:
       # - run: npm test
       - run: |
           npm install -g httpyac
-          # npm install httpyac
           httpyac --version
-      - run: |
+      - name: Checking existing methods GetEmployeesAsync and GetEmployeeByIdAsync
+        run: |
           cd "${WORK_DIR}"
-          httpyac send tests/requests.http
-
-    # strategy:
-    #   matrix:
-    #     node-version: [18.x, 20.x, 22.x]
-    #     # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
-    # steps:
-    # - uses: actions/checkout@v4    strategy:
-    #   matrix:
-    #     node-version: [18.x, 20.x, 22.x]
-    #     # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
-    # steps:
-    # - uses: actions/checkout@v4
-    # - name: Use Node.js ${{ matrix.node-version }}
-    #   uses: actions/setup-node@v4
-    #   with:
-    #     node-version: ${{ matrix.node-version }}
-    #     cache: 'npm'
-    # - run: npm ci
-    # - run: npm run build --if-present
-    # - run: npm test
-    # - name: Use Node.js ${{ matrix.node-version }}
-    #   uses: actions/setup-node@v4
-    #   with:
-    #     node-version: ${{ matrix.node-version }}
-    #     cache: 'npm'
-    # - run: npm ci
-    # - run: npm run build --if-present
-    # - run: npm test
+          httpyac send --all --insecure --output body tests/read.http
+      - name: Checking employee creation, method PostEmployeeAsync
+        run: |
+          cd "${WORK_DIR}"
+          httpyac send --all --insecure --output body tests/create.http
+      - name: Checking employee alteration, method PutEmployeeAsync
+        run: |
+          cd "${WORK_DIR}"
+          httpyac send --all --insecure --output body tests/update.http
+      - name: Checking employee deletion, method DeleteEmployeeAsync
+        run: |
+          cd "${WORK_DIR}"
+          httpyac send --all --insecure --output body tests/delete.http

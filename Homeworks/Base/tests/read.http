@@ -1,0 +1,7 @@
+# @import ./variables.http
+
+### GetEmployeesAsync
+GET {{baseUrl}}
+
+### GetEmployeeByIdAsync
+GET {{baseUrl}}/{{user01Id}}
