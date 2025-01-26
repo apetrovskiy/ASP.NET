@@ -72,43 +72,43 @@ namespace PromoCodeFactory.WebHost.Controllers
             return employeeModel;
         }
 
-        // /// <summary>
-        // /// Создать сотрудника
-        // /// </summary>
-        // /// <returns>EmployeeResponse</returns>
-        // [HttpPost]
-        // public async Task<ActionResult<EmployeeResponse>> CreateEmployeeAsync(CreateOrEditEmployeeRequest request)
-        // {
-        //     // //Получаем предпочтения из бд и сохраняем большой объект
-        //     // var preferences = await _preferenceRepository
-        //     //     .GetRangeByIdsAsync(request.PreferenceIds);
+        /// <summary>
+        /// Создать сотрудника
+        /// </summary>
+        /// <returns>EmployeeResponse</returns>
+        [HttpPost]
+        public async Task<ActionResult<EmployeeResponse>> CreateEmployeeAsync(CreateOrEditEmployeeRequest request)
+        {
+            // //Получаем предпочтения из бд и сохраняем большой объект
+            // var preferences = await _preferenceRepository
+            //     .GetRangeByIdsAsync(request.PreferenceIds);
 
-        //     // Customer customer = CustomerMapper.MapFromModel(request, preferences);
+            // Customer customer = CustomerMapper.MapFromModel(request, preferences);
 
-        //     // await _customerRepository.AddAsync(customer);
+            // await _customerRepository.AddAsync(customer);
 
-        //     // return CreatedAtAction(nameof(GetCustomerAsync), new { id = customer.Id }, customer.Id);
+            // return CreatedAtAction(nameof(GetCustomerAsync), new { id = customer.Id }, customer.Id);
 
-        //     //             Task<IEnumerable<T>> GetAllAsync();
-        //     // Task<T> GetByIdAsync(Guid id);// var roles=await _employeeRepository.GetRo
-        //     var roles = await _roleRepository.GetAllAsync();
-        //     // var employee=EmployeeMapper
-        //     /*
-        // public string FirstName { get; set; }
-        // public string LastName { get; set; }
+            //             Task<IEnumerable<T>> GetAllAsync();
+            // Task<T> GetByIdAsync(Guid id);// var roles=await _employeeRepository.GetRo
+            var roles = await _roleRepository.GetRangeByIdsAsync(request.Roles.Select(x => x.Id).ToList());
+            // var employee=EmployeeMapper
+            /*
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
 
-        // public string FullName => $"{FirstName} {LastName}";
+        public string FullName => $"{FirstName} {LastName}";
 
-        // public string Email { get; set; }
+        public string Email { get; set; }
 
-        // public List<Role> Roles { get; set; }
+        public List<Role> Roles { get; set; }
 
-        // public int AppliedPromocodesCount { get; set; }
-        //     */
-        //     Employee employee = new() { FirstName = request.FirstName, LastName = request.LastName, Email = request.Email }; //, Roles = request.Roles.Select(role => new Role() { Name = role.Name, Description = role.Description }) };
-        //     await _employeeRepository.AddAsync(request);
-        //     return CreatedAtAction(nameof(CreateEmployeeAsync), new { id = request.id }, request.id);
-        // }
+        public int AppliedPromocodesCount { get; set; }
+            */
+            Employee employee = new() { FirstName = request.FirstName, LastName = request.LastName, Email = request.Email, Roles = roles.ToList() }; //, Roles = request.Roles.Select(role => new Role() { Name = role.Name, Description = role.Description }) };
+            await _employeeRepository.AddAsync(employee);
+            return CreatedAtAction(nameof(CreateEmployeeAsync), new { id = employee.Id }, employee.Id);
+        }
 
         /// <summary>
         /// Удалить работника
