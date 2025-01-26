@@ -89,8 +89,6 @@ jobs:
               httpyac send --all --insecure --output body tests/update.http; \
               httpyac send --all --insecure --output body tests/delete.http; \
             }
-          # & { "../../${HTTPRUN}/${HTTPRUN_SOLUTION_DIR}/${HTTPRUN_PATH}/${HTTPRUN}" tests/read.http; }
-          # sleep 20s
       - name: Stopping the service
         run: pkill dotnet
       # - name: Test
