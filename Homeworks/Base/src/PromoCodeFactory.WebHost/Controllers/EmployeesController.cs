@@ -19,9 +19,10 @@ namespace PromoCodeFactory.WebHost.Controllers
         private readonly IRepository<Employee> _employeeRepository;
         private readonly IRepository<Role> _roleRepository;
 
-        public EmployeesController(IRepository<Employee> employeeRepository)
+        public EmployeesController(IRepository<Employee> employeeRepository, IRepository<Role> roleRepository)
         {
             _employeeRepository = employeeRepository;
+            _roleRepository = roleRepository;
         }
 
         /// <summary>
@@ -89,12 +90,27 @@ namespace PromoCodeFactory.WebHost.Controllers
 
             // return CreatedAtAction(nameof(GetCustomerAsync), new { id = customer.Id }, customer.Id);
 
-            //             Task<IEnumerable<T>> GetAllAsync();
-            // Task<T> GetByIdAsync(Guid id);// var roles=await _employeeRepository.GetRo
+
+            // try
+            // {
+            // Console.WriteLine("CreateEmployeeAsync 0004");
             var roles = await _roleRepository.GetRangeByIdsAsync(request.Roles.Select(x => x.Id).ToList());
-            Employee employee = new() { FirstName = request.FirstName, LastName = request.LastName, Email = request.Email, Roles = roles.ToList() }; //, Roles = request.Roles.Select(role => new Role() { Name = role.Name, Description = role.Description }) };
+            // Console.WriteLine("CreateEmployeeAsync 0005");
+            Employee employee = new() { FirstName = request.FirstName, LastName = request.LastName, Email = request.Email, Roles = roles.ToList() };
+            //, Roles = request.Roles.Select(role => new Role() { Name = role.Name, Description = role.Description }) };
+            // Console.WriteLine("CreateEmployeeAsync 0006");
             await _employeeRepository.AddAsync(employee);
-            return CreatedAtAction(nameof(CreateEmployeeAsync), new { id = employee.Id }, employee.Id);
+            Console.WriteLine("CreateEmployeeAsync 0007");
+            Console.WriteLine($"nameof(GetEmployeesAsync) = {nameof(GetEmployeesAsync)}");
+            Console.WriteLine($"employee.Id = {employee.Id}");
+            Console.WriteLine($"new id = employee.Id = {new { id = employee.Id }}");
+            return CreatedAtAction(nameof(GetEmployeesAsync), new { id = employee.Id }, employee.Id);
+            // }
+            // catch (Exception e)
+            // {
+            //     Console.WriteLine($"{e} {e.Message} {e.StackTrace}");
+            //     return NotFound();
+            // }
         }
 
         /// <summary>

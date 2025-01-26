@@ -9,11 +9,12 @@
 ################################################## Создание сотрудника ##################################################
 ### CreateEmployeeAsync
 POST {{baseUrl}}
+Accept: application/json
 Content-Type: application/json
 
 {
-  "id": {{employeeToDeleteId}},
-  "fullName": "string",
+  "firstName": "string",
+  "lastName": "string",
   "email": "string",
   "roles": [
     {

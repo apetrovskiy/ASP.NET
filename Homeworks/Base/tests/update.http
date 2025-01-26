@@ -9,11 +9,12 @@
 ################################################## Создание сотрудника ##################################################
 ### GetEmployeesAsync
 POST {{baseUrl}}
+Accept: application/json
 Content-Type: application/json
 
 {
-  "id": {{employeeToUpdateId}},
-  "fullName": "string",
+  "firstName": "string",
+  "lastName": "string",
   "email": "string",
   "roles": [
     {
@@ -28,11 +29,13 @@ Content-Type: application/json
 ################################################## Изменение сотрудника ##################################################
 ###
 PUT {{baseUrl}}/{{employeeToUpdateId}}
+Accept: application/json
 Content-Type: application/json
 
 {
   "id": {{employeeToUpdateId}},
-  "fullName": "new name",
+  "firstName": "string",
+  "lastName": "string",
   "email": "new email",
   "roles": [
     {
