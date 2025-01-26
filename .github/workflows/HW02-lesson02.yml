@@ -84,6 +84,7 @@ jobs:
           cd "${WORK_DIR}"
           dotnet run --project "${MAIN_PROJECT}" & \
             { \
+              sleep 1m; \
               httpyac send --all --insecure --output body tests/read.http; \
               httpyac send --all --insecure --output body tests/create.http; \
               httpyac send --all --insecure --output body tests/update.http; \
@@ -97,51 +98,51 @@ jobs:
       #     # nc localhost 5000 < tests/read.http
       #     # dotnet test --no-build --verbosity normal
 
-  tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.x
-          # cache: 'npm'
-      - run: |
-          npm install -g httpyac
-          httpyac --version
-          #
-          hostname
-          #
-          sleep 2m
-      - name: Checking existing methods GetEmployeesAsync and GetEmployeeByIdAsync
-        run: |
-          cd "${WORK_DIR}"
-          #
-          pwd
-          ls tests/read*
-          #
-          httpyac send --all --insecure --output body tests/read.http
-      - name: Checking employee creation, method PostEmployeeAsync
-        run: |
-          cd "${WORK_DIR}"
-          #
-          pwd
-          ls tests/read*
-          #
-          httpyac send --all --insecure --output body tests/create.http
-      - name: Checking employee alteration, method PutEmployeeAsync
-        run: |
-          cd "${WORK_DIR}"
-          #
-          pwd
-          ls tests/read*
-          #
-          httpyac send --all --insecure --output body tests/update.http
-      - name: Checking employee deletion, method DeleteEmployeeAsync
-        run: |
-          cd "${WORK_DIR}"
-          #
-          pwd
-          ls tests/read*
-          #
-          httpyac send --all --insecure --output body tests/delete.http
+  # tests:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Use Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 22.x
+  #         # cache: 'npm'
+  #     - run: |
+  #         npm install -g httpyac
+  #         httpyac --version
+  #         #
+  #         hostname
+  #         #
+  #         sleep 2m
+  #     - name: Checking existing methods GetEmployeesAsync and GetEmployeeByIdAsync
+  #       run: |
+  #         cd "${WORK_DIR}"
+  #         #
+  #         pwd
+  #         ls tests/read*
+  #         #
+  #         httpyac send --all --insecure --output body tests/read.http
+  #     - name: Checking employee creation, method PostEmployeeAsync
+  #       run: |
+  #         cd "${WORK_DIR}"
+  #         #
+  #         pwd
+  #         ls tests/read*
+  #         #
+  #         httpyac send --all --insecure --output body tests/create.http
+  #     - name: Checking employee alteration, method PutEmployeeAsync
+  #       run: |
+  #         cd "${WORK_DIR}"
+  #         #
+  #         pwd
+  #         ls tests/read*
+  #         #
+  #         httpyac send --all --insecure --output body tests/update.http
+  #     - name: Checking employee deletion, method DeleteEmployeeAsync
+  #       run: |
+  #         cd "${WORK_DIR}"
+  #         #
+  #         pwd
+  #         ls tests/read*
+  #         #
+  #         httpyac send --all --insecure --output body tests/delete.http
