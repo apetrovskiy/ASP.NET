@@ -1,14 +1,17 @@
 @baseUrl = http://localhost:5000/api/v1/employees
 # @import ./variables.http
 
-@newUserId = "451876d5-c8e7-4a11-9c7b-eb9a54e1a32f"
+@newEmployeeID = "451876d5-c8e7-4a11-9c7b-eb9a54e1a32f"
+
+################################################## CREATE AN EMPLOYEE ##################################################
 
 ################################################## Создание сотрудника ##################################################
-### GetEmployeesAsync
+### CreateEmployeeAsync
 POST {{baseUrl}}
+Content-Type: application/json
 
 {
-  "id": {{newUserId}},
+  "id": {{newEmployeeID}},
   "fullName": "string",
   "email": "string",
   "roles": [
@@ -23,8 +26,5 @@ POST {{baseUrl}}
 
 ################################################## Получение сотрудника ##################################################
 ### GetEmployeeByIdAsync
-GET {{baseUrl}}/{{newUserId}}
-
-
-
-
+GET {{baseUrl}}/{{newEmployeeID}}
+Accept: application/json

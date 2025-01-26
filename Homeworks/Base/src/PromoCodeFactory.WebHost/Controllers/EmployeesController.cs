@@ -92,19 +92,6 @@ namespace PromoCodeFactory.WebHost.Controllers
             //             Task<IEnumerable<T>> GetAllAsync();
             // Task<T> GetByIdAsync(Guid id);// var roles=await _employeeRepository.GetRo
             var roles = await _roleRepository.GetRangeByIdsAsync(request.Roles.Select(x => x.Id).ToList());
-            // var employee=EmployeeMapper
-            /*
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-
-        public string FullName => $"{FirstName} {LastName}";
-
-        public string Email { get; set; }
-
-        public List<Role> Roles { get; set; }
-
-        public int AppliedPromocodesCount { get; set; }
-            */
             Employee employee = new() { FirstName = request.FirstName, LastName = request.LastName, Email = request.Email, Roles = roles.ToList() }; //, Roles = request.Roles.Select(role => new Role() { Name = role.Name, Description = role.Description }) };
             await _employeeRepository.AddAsync(employee);
             return CreatedAtAction(nameof(CreateEmployeeAsync), new { id = employee.Id }, employee.Id);

@@ -1,20 +1,49 @@
 @baseUrl = http://localhost:5000/api/v1/employees
 # @import ./variables.http
 
+@employeeToUpdateId = "991876d5-c8e7-4a11-9c7b-cd9a54e4c32f"
+
+################################################## UPDATE AN EMPLOYEE ##################################################
+
 ################################################## Создание сотрудника ##################################################
 ### GetEmployeesAsync
-GET {{baseUrl}}
+POST {{baseUrl}}
+Content-Type: application/json
 
-### GetEmployeeByIdAsync
-GET {{baseUrl}}/{{user01Id}}
-
-
-###
-
-###
+{
+  "id": {{employeeToUpdateId}},
+  "fullName": "string",
+  "email": "string",
+  "roles": [
+    {
+      "id": "string",
+      "name": "string",
+      "description": "string"
+    }
+  ],
+  "appliedPromocodesCount": 0
+}
 
 ################################################## Изменение сотрудника ##################################################
 ###
+PUT {{baseUrl}}/{{employeeToUpdateId}}
+Content-Type: application/json
 
-###
+{
+  "id": {{employeeToUpdateId}},
+  "fullName": "new name",
+  "email": "new email",
+  "roles": [
+    {
+      "id": "string",
+      "name": "string",
+      "description": "string"
+    }
+  ],
+  "appliedPromocodesCount": 0
+}
 
+################################################## Получение сотрудника ##################################################
+### GetEmployeeByIdAsync
+GET {{baseUrl}}/{{employeeToUpdateId}}
+Accept: application/json
