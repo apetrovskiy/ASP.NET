@@ -9,6 +9,9 @@ using PromoCodeFactory.WebHost.Models;
 
 namespace PromoCodeFactory.WebHost.Controllers
 {
+    using PromoCodeFactory.WebHost.Mappers;
+    using PromoCodeFactory.DataAccess.Repositories;
+
     /// <summary>
     /// Сотрудники
     /// </summary>
@@ -52,10 +55,19 @@ namespace PromoCodeFactory.WebHost.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<EmployeeResponse>> GetEmployeeByIdAsync(Guid id)
         {
+            //
+            Console.WriteLine($"GetEmployeeByIdAsync 0001 {id}");
+            //
             var employee = await _employeeRepository.GetByIdAsync(id);
+            //
+            Console.WriteLine($"GetEmployeeByIdAsync 0002 {employee.Id}, {employee.FirstName}, {employee.LastName}, {employee.Email}");
+            //
 
             if (employee == null)
                 return NotFound();
+            //
+            Console.WriteLine($"GetEmployeeByIdAsync 0003 +");
+            //
 
             var employeeModel = new EmployeeResponse()
             {
@@ -69,6 +81,9 @@ namespace PromoCodeFactory.WebHost.Controllers
                 FullName = employee.FullName,
                 AppliedPromocodesCount = employee.AppliedPromocodesCount
             };
+            //
+            Console.WriteLine($"GetEmployeeByIdAsync 0004 {employeeModel.Id}, {employeeModel.FullName}, {employeeModel.Email}");
+            //
 
             return employeeModel;
         }
@@ -93,18 +108,40 @@ namespace PromoCodeFactory.WebHost.Controllers
 
             // try
             // {
-            // Console.WriteLine("CreateEmployeeAsync 0004");
             var roles = await _roleRepository.GetRangeByIdsAsync(request.Roles.Select(x => x.Id).ToList());
-            // Console.WriteLine("CreateEmployeeAsync 0005");
-            Employee employee = new() { FirstName = request.FirstName, LastName = request.LastName, Email = request.Email, Roles = roles.ToList() };
+            // TODO: mapper
+            // Employee employee = new() { Id = Guid.Parse("451533d5-d8d5-4a11-9c7b-eb9f14e1a32f"), FirstName = request.FirstName, LastName = request.LastName, Email = request.Email, Roles = roles.ToList() };
+            var employee = EmployeeMapper.MapFromModel(request, roles);
+            Console.WriteLine($"id={employee.Id}, first={employee.FirstName}, last={employee.LastName}, email={employee.Email}");
             //, Roles = request.Roles.Select(role => new Role() { Name = role.Name, Description = role.Description }) };
             // Console.WriteLine("CreateEmployeeAsync 0006");
             await _employeeRepository.AddAsync(employee);
             Console.WriteLine("CreateEmployeeAsync 0007");
-            Console.WriteLine($"nameof(GetEmployeesAsync) = {nameof(GetEmployeesAsync)}");
+            Console.WriteLine($"nameof(GetEmployeeByIdAsync) = {nameof(GetEmployeeByIdAsync)}");
             Console.WriteLine($"employee.Id = {employee.Id}");
             Console.WriteLine($"new id = employee.Id = {new { id = employee.Id }}");
-            return CreatedAtAction(nameof(GetEmployeesAsync), new { id = employee.Id }, employee.Id);
+            //
+            try
+            {
+                Console.WriteLine($"GetByIdAsync(employee.Id); {employee.Id}");
+                (_employeeRepository as InMemoryRepository<Employee>).Data.ToList().ForEach(d => Console.WriteLine($"data item: {d.Id}, {d.Email}"));
+                var saved = await _employeeRepository.GetByIdAsync(employee.Id);
+                Console.WriteLine($"before?");
+                Console.WriteLine($"null == saved {null == saved}");
+                if (null != saved)
+                {
+                    Console.WriteLine($"saved.Id {saved.Id}");
+                    Console.WriteLine($"saved.FullName {saved.FullName}");
+                    Console.WriteLine($"saved.Email {saved.Email}");
+                    Console.WriteLine($"CreateEmployeeAsync -> GetEmployeeByIdAsync: {saved.Id}, {saved.FullName}, {saved.Email}");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"{e.Message}; {e.StackTrace}");
+            }
+            //
+            return CreatedAtAction(nameof(GetEmployeeByIdAsync), new { id = employee.Id }, employee.Id);
             // }
             // catch (Exception e)
             // {
