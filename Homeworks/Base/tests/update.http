@@ -1,13 +1,10 @@
 @baseUrl = http://localhost:5000/api/v1/employees
 # @import ./variables.http
 
-@employeeToUpdateId = "991876d5-c8e7-4a11-9c7b-cd9a54e4c32f"
-@partnerManagerRoleId = "00000000-0000-0000-0000-000000000000"
+@employeeToUpdateId = 991876d5-c8e7-4a11-9c7b-cd9a54e4c32f
+@partnerManagerRoleId = b0ae7aac-5493-45cd-ad16-87426a5e7665
 
-################################################## UPDATE AN EMPLOYEE ##################################################
-
-################################################## Создание сотрудника ##################################################
-### GetEmployeesAsync
+### CreateEmployeeAsync - создание сотрудника
 POST {{baseUrl}}
 Accept: application/json
 Content-Type: application/json
@@ -26,8 +23,7 @@ Content-Type: application/json
   "appliedPromocodesCount": 0
 }
 
-################################################## Изменение сотрудника ##################################################
-###
+### TODO: - изменение сотрудника
 PUT {{baseUrl}}/{{employeeToUpdateId}}
 Accept: application/json
 Content-Type: application/json
@@ -47,7 +43,6 @@ Content-Type: application/json
   "appliedPromocodesCount": 0
 }
 
-################################################## Получение сотрудника ##################################################
-### GetEmployeeByIdAsync
+### GetEmployeeByIdAsync - получение сотрудника
 GET {{baseUrl}}/{{employeeToUpdateId}}
 Accept: application/json
