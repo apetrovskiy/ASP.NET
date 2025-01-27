@@ -25,7 +25,7 @@ namespace PromoCodeFactory.DataAccess.Repositories
         public Task<IEnumerable<T>> GetAllAsync()
         {
             //
-            Data.ToList().ForEach(d => Console.WriteLine($"GetAllAsync: {d.Id}"));
+            // Data.ToList().ForEach(d => Console.WriteLine($"GetAllAsync: {d.Id}"));
             //
             return Task.FromResult(Data);
         }
@@ -33,26 +33,26 @@ namespace PromoCodeFactory.DataAccess.Repositories
         public Task<T> GetByIdAsync(Guid id)
         {
             //
-            Data.ToList().ForEach(d => Console.WriteLine($"GetByIdAsync: {d.Id}"));
+            // Data.ToList().ForEach(d => Console.WriteLine($"GetByIdAsync: {d.Id}"));
             //
             return Task.FromResult(Data.FirstOrDefault(x => x.Id == id));
         }
         public Task<IEnumerable<T>> GetRangeByIdsAsync(List<Guid> ids)
         {
             //
-            Data.ToList().ForEach(d => Console.WriteLine($"GetRangeByIdsAsync: {d.Id}"));
+            // Data.ToList().ForEach(d => Console.WriteLine($"GetRangeByIdsAsync: {d.Id}"));
             //
             return Task.FromResult(Data.Where(x => ids.Contains(x.Id)).AsEnumerable());
         }
         public async Task AddAsync(T entity)
         {
             //
-            Data.ToList().ForEach(d => Console.WriteLine($"AddAsync 1: {d.Id}"));
+            // Data.ToList().ForEach(d => Console.WriteLine($"AddAsync 1: {d.Id}"));
             //
-            Task.FromResult(Data.Append(entity));
-            Data.Append(entity);
+            Data = await Task.FromResult(Data.Append(entity));
+            // Data = Data.Append(entity);
             //
-            Data.ToList().ForEach(d => Console.WriteLine($"AddAsync 2: {d.Id}"));
+            // Data.ToList().ForEach(d => Console.WriteLine($"AddAsync 2: {d.Id}"));
             //
             return;
         }
@@ -60,14 +60,14 @@ namespace PromoCodeFactory.DataAccess.Repositories
         {
             var item = Data.FirstOrDefault(x => x.Id == entity.Id);
             //
-            Data.ToList().ForEach(d => Console.WriteLine($"UpdateAsync 1: {d.Id}"));
+            // Data.ToList().ForEach(d => Console.WriteLine($"UpdateAsync 1: {d.Id}"));
             //
-            Task.FromResult(Data.ToList().Remove(item));
-            Task.FromResult(Data.Append(entity));
-            Data.ToList().Remove(item);
-            Data.Append(entity);
+            await Task.FromResult(Data.ToList().Remove(item));
+            Data = await Task.FromResult(Data.Append(entity));
+            // Data.ToList().Remove(item);
+            // Data = Data.Append(entity);
             //
-            Data.ToList().ForEach(d => Console.WriteLine($"UpdateAsync 2: {d.Id}"));
+            // Data.ToList().ForEach(d => Console.WriteLine($"UpdateAsync 2: {d.Id}"));
             //
             return;
         }
@@ -75,12 +75,12 @@ namespace PromoCodeFactory.DataAccess.Repositories
         {
             var item = Data.FirstOrDefault(x => x.Id == entity.Id);
             //
-            Data.ToList().ForEach(d => Console.WriteLine($"DeleteAsync 1: {d.Id}"));
+            // Data.ToList().ForEach(d => Console.WriteLine($"DeleteAsync 1: {d.Id}"));
             //
-            Task.FromResult(Data.ToList().Remove(item));
-            Data.ToList().Remove(item);
+            await Task.FromResult(Data.ToList().Remove(item));
+            //  Data.ToList().Remove(item);
             //
-            Data.ToList().ForEach(d => Console.WriteLine($"DeleteAsync 2: {d.Id}"));
+            // Data.ToList().ForEach(d => Console.WriteLine($"DeleteAsync 2: {d.Id}"));
             //
             return;
         }

@@ -140,6 +140,7 @@ namespace PromoCodeFactory.WebHost.Controllers
             {
                 Console.WriteLine($"{e.Message}; {e.StackTrace}");
             }
+            Console.WriteLine("probably, before the failure !!!!!!!!!!!!!!!!!!!!!");
             //
             return CreatedAtAction(nameof(GetEmployeeByIdAsync), new { id = employee.Id }, employee.Id);
             // }
@@ -154,7 +155,7 @@ namespace PromoCodeFactory.WebHost.Controllers
         /// Удалить работника
         /// </summary>
         /// <param name="id">Id работника, например <example>451533d5-d8d5-4a11-9c7b-eb9f14e1a32f</example></param>
-        [HttpDelete]
+        [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteEmployeeByIdAsync(Guid id)
         {
             /*

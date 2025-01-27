@@ -1,8 +1,8 @@
 @baseUrl = http://localhost:5000/api/v1/employees
 # @import ./variables.http
 
-@employeeToDeleteId = "423876d5-5ae7-4a83-9c7b-eb9a54e14f2f"
-@adminROleId = "00000000-0000-0000-0000-000000000000"
+@employeeToDeleteId = a3eeb793-e05b-4d08-a8ce-ed9408c22a9d
+@adminRoleId = 00000000-0000-0000-0000-000000000000
 
 ################################################## DELETE AN EMPLOYEE ##################################################
 
@@ -18,7 +18,7 @@ Content-Type: application/json
   "email": "string",
   "roles": [
     {
-      "id": {{adminROleId}},
+      "id": {{adminRoleId}},
       "name": "string",
       "description": "string"
     }
