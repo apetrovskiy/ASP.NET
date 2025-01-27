@@ -7,8 +7,14 @@
 ### GetEmployeesAsync - получение всех сотрудников
 GET {{baseUrl}}
 
+>>! ./employeesViewResult.json
+
 ### GetEmployeeByIdAsync - получение сотрудника
 GET {{baseUrl}}/{{employee01Id}}
 
+>> ./employeesViewResult.json
+
 ### GetEmployeeByIdAsync - получение сотрудника
 GET {{baseUrl}}/{{employee02Id}}
+
+>> ./employeesViewResult.json

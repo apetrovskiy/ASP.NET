@@ -53,20 +53,20 @@ namespace PromoCodeFactory.WebHost.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("{id:guid}")]
-        public async Task<ActionResult<EmployeeResponse>> GetEmployeeByIdAsync(Guid id)
+        public async Task<ActionResult<EmployeeResponse>> GetEmployeeByIdAsync([FromRoute] Guid id)
         {
             //
-            Console.WriteLine($"GetEmployeeByIdAsync 0001 {id}");
+            Console.WriteLine($"GetEmployeeByIdAsync guid 0001 {id}");
             //
             var employee = await _employeeRepository.GetByIdAsync(id);
             //
-            Console.WriteLine($"GetEmployeeByIdAsync 0002 {employee.Id}, {employee.FirstName}, {employee.LastName}, {employee.Email}");
+            Console.WriteLine($"GetEmployeeByIdAsync guid 0002 {employee.Id}, {employee.FirstName}, {employee.LastName}, {employee.Email}");
             //
 
             if (employee == null)
                 return NotFound();
             //
-            Console.WriteLine($"GetEmployeeByIdAsync 0003 +");
+            Console.WriteLine($"GetEmployeeByIdAsync guid 0003 +");
             //
 
             var employeeModel = new EmployeeResponse()
@@ -84,14 +84,103 @@ namespace PromoCodeFactory.WebHost.Controllers
                 AppliedPromocodesCount = employee.AppliedPromocodesCount
             };
             //
-            Console.WriteLine($"GetEmployeeByIdAsync 0004 {employeeModel.Id}, {employeeModel.FullName}, {employeeModel.Email}");
+            Console.WriteLine($"GetEmployeeByIdAsync guid 0004 {employeeModel.Id}, {employeeModel.FullName}, {employeeModel.Email}");
             //
 
             return employeeModel;
         }
 
+        // /// <summary>
+        // /// Получить данные сотрудника по Id
+        // /// </summary>
+        // /// <returns></returns>
+        // [HttpGet("{id}")]
+        // public async Task<ActionResult<EmployeeResponse>> GetEmployeeByIdAsync([FromRoute] string id)
+        // {
+        //     //
+        //     Console.WriteLine($"GetEmployeeByIdAsync string 0001 {id}");
+        //     //
+        //     var employee = await _employeeRepository.GetByIdAsync(Guid.Parse(id));
+        //     //
+        //     Console.WriteLine($"GetEmployeeByIdAsync string 0002 {employee.Id}, {employee.FirstName}, {employee.LastName}, {employee.Email}");
+        //     //
+
+        //     if (employee == null)
+        //         return NotFound();
+        //     //
+        //     Console.WriteLine($"GetEmployeeByIdAsync string 0003 +");
+        //     //
+
+        //     var employeeModel = new EmployeeResponse()
+        //     {
+        //         Id = employee.Id,
+        //         Email = employee.Email,
+        //         Roles = employee.Roles.Select(x => new RoleItemResponse()
+        //         {
+        //             // why is this hidden?
+        //             Id = x.Id,
+        //             Name = x.Name,
+        //             Description = x.Description
+        //         }).ToList(),
+        //         FullName = employee.FullName,
+        //         AppliedPromocodesCount = employee.AppliedPromocodesCount
+        //     };
+        //     //
+        //     Console.WriteLine($"GetEmployeeByIdAsync string 0004 {employeeModel.Id}, {employeeModel.FullName}, {employeeModel.Email}");
+        //     //
+
+        //     return employeeModel;
+        // }
+
+        // public class Dto
+        // {
+        //     public Guid Id { get; set; }
+        // }
+
+        // /// <summary>
+        // /// Получить данные сотрудника по Id
+        // /// </summary>
+        // /// <returns></returns>
+        // [HttpGet]
+        // public async Task<ActionResult<EmployeeResponse>> GetEmployeeByIdAsync([FromBody] Dto dto)
+        // {
+        //     //
+        //     Console.WriteLine($"GetEmployeeByIdAsync dto 0001 {dto}");
+        //     //
+        //     var employee = await _employeeRepository.GetByIdAsync(dto.Id);
+        //     //
+        //     Console.WriteLine($"GetEmployeeByIdAsync dto 0002 {employee.Id}, {employee.FirstName}, {employee.LastName}, {employee.Email}");
+        //     //
+
+        //     if (employee == null)
+        //         return NotFound();
+        //     //
+        //     Console.WriteLine($"GetEmployeeByIdAsync dto 0003 +");
+        //     //
+
+        //     var employeeModel = new EmployeeResponse()
+        //     {
+        //         Id = employee.Id,
+        //         Email = employee.Email,
+        //         Roles = employee.Roles.Select(x => new RoleItemResponse()
+        //         {
+        //             // why is this hidden?
+        //             Id = x.Id,
+        //             Name = x.Name,
+        //             Description = x.Description
+        //         }).ToList(),
+        //         FullName = employee.FullName,
+        //         AppliedPromocodesCount = employee.AppliedPromocodesCount
+        //     };
+        //     //
+        //     Console.WriteLine($"GetEmployeeByIdAsync dto 0004 {employeeModel.Id}, {employeeModel.FullName}, {employeeModel.Email}");
+        //     //
+
+        //     return employeeModel;
+        // }
+
         /// <summary>
-        /// Создать сотрудника
+        /// Создать нового сотрудника
         /// </summary>
         /// <returns>EmployeeResponse</returns>
         [HttpPost]
@@ -107,20 +196,21 @@ namespace PromoCodeFactory.WebHost.Controllers
 
             // return CreatedAtAction(nameof(GetCustomerAsync), new { id = customer.Id }, customer.Id);
 
-
+            Console.WriteLine($"POST input {request.FirstName}, {request.LastName}, {request.Email}");
+            // , {request.Roles[0].Id}");
             // try
             // {
-            var roles = await _roleRepository.GetRangeByIdsAsync(request.Roles.Select(x => x.Id).ToList());
+            // TOOD:        var roles = await _roleRepository.GetRangeByIdsAsync(request.Roles.Select(x => x.Id).ToList());
             // TODO: mapper
             // Employee employee = new() { Id = Guid.Parse("451533d5-d8d5-4a11-9c7b-eb9f14e1a32f"), FirstName = request.FirstName, LastName = request.LastName, Email = request.Email, Roles = roles.ToList() };
-            var employee = EmployeeMapper.MapFromModel(request, roles);
+            var employee = EmployeeMapper.MapFromModel(request, []); // TODO: , roles);
             Console.WriteLine($"id={employee.Id}, first={employee.FirstName}, last={employee.LastName}, email={employee.Email}");
             //, Roles = request.Roles.Select(role => new Role() { Name = role.Name, Description = role.Description }) };
             // Console.WriteLine("CreateEmployeeAsync 0006");
             await _employeeRepository.AddAsync(employee);
-            Console.WriteLine("CreateEmployeeAsync 0007");
-            Console.WriteLine($"nameof(GetEmployeeByIdAsync) = {nameof(GetEmployeeByIdAsync)}");
-            Console.WriteLine($"employee.Id = {employee.Id}");
+            // Console.WriteLine("CreateEmployeeAsync 0007");
+            // Console.WriteLine($"nameof(GetEmployeeByIdAsync) = {nameof(GetEmployeeByIdAsync)}");
+            // Console.WriteLine($"employee.Id = {employee.Id}");
             Console.WriteLine($"new id = employee.Id = {new { id = employee.Id }}");
             //
             try
@@ -142,9 +232,25 @@ namespace PromoCodeFactory.WebHost.Controllers
             {
                 Console.WriteLine($"{e.Message}; {e.StackTrace}");
             }
+            var result1 = CreatedAtAction(nameof(GetEmployeeByIdAsync), nameof(EmployeesController), new { Id = employee.Id.ToString() }, employee.Id.ToString());
+            Console.WriteLine($"{result1.ActionName}, {result1.ControllerName}, {result1.RouteValues}, {result1.Value}");
+            var result2 = CreatedAtAction("GetEmployeeById", new { id = employee.Id }, employee.Id);
+            Console.WriteLine($"{result2.ActionName}, {result2.ControllerName}, {result2.RouteValues}, {result2.Value}");
+
             Console.WriteLine("probably, before the failure !!!!!!!!!!!!!!!!!!!!!");
             //
-            return CreatedAtAction(nameof(GetEmployeeByIdAsync), new { id = employee.Id }, employee.Id);
+            // return CreatedAtAction(nameof(GetEmployeeByIdAsync), new { id = Guid.Parse(employee.Id.ToString()) }, Guid.Parse(employee.Id.ToString()));
+            // TODO: is working
+            // return CreatedAtAction("GetEmployeeById", new { id = Guid.Parse(employee.Id.ToString()) }, Guid.Parse(employee.Id.ToString()));
+            // TODO: is working
+            // return CreatedAtAction("GetEmployeeById", new { id = employee.Id.ToString() }, employee.Id.ToString());
+            // TODO: is working
+            return CreatedAtAction("GetEmployeeById", new { id = employee.Id }, employee.Id);
+            // return CreatedAtAction(nameof(GetEmployeeByIdAsync), new { id = employee.Id }, employee.Id);
+            // return CreatedAtAction(nameof(GetEmployeeByIdAsync), new { Id = employee.Id }, employee.Id);
+            // return CreatedAtAction(nameof(GetEmployeeByIdAsync), nameof(EmployeesController), new { Id = employee.Id.ToString() }, employee.Id.ToString());
+            // return CreatedAtAction(nameof(GetEmployeeByIdAsync), employee.Id);
+            // return CreatedAtAction(nameof(GetEmployeeByIdAsync), employee.Id, employee.Id);
             // }
             // catch (Exception e)
             // {

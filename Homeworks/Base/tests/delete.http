@@ -1,32 +1,30 @@
 @baseUrl = http://localhost:5000/api/v1/employees
 # @import ./variables.http
 
-@employeeToDeleteId = 1282ba61-6bdd-462d-9229-894e3e175e86
 @adminRoleId = 53729686-a368-4eeb-8bfa-cc69b6050d02
 
 ### CreateEmployeeAsync - создание сотрудника
+# @name created
 POST {{baseUrl}}
 Accept: application/json
 Content-Type: application/json
 
 {
-  "firstName": "string",
-  "lastName": "string",
-  "email": "string",
-  "roles": [
-    {
-      "id": {{adminRoleId}},
-      "name": "string",
-      "description": "string"
-    }
-  ],
-  "appliedPromocodesCount": 0
+  "firstName": "First{{$randomInt 100 999}}",
+  "lastName": "Last{{$randomInt 100 999}}",
+  "email": "user{{$randomInt 100 999}}@yandex.ru"
 }
 
+>>! ./employeeCreationAndDeletionResult.json
+
 ### DeleteEmployeeByIdAsync - удаление сотрудника
-DELETE {{baseUrl}}/{{employeeToDeleteId}}
+DELETE {{baseUrl}}/{{created}}
 Accept: application/json
 
+>> ./employeeCreationAndDeletionResult.json
+
 ### GetEmployeeByIdAsync - получение сотрудника
-GET {{baseUrl}}/{{employeeToDeleteId}}
+GET {{baseUrl}}/{{created}}
 Accept: application/json
+
+>> ./employeeCreationAndDeletionResult.json
