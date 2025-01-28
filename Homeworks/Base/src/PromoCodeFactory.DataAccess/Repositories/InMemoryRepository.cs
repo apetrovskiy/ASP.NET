@@ -8,8 +8,7 @@ namespace PromoCodeFactory.DataAccess.Repositories
 {
     public class InMemoryRepository<T> : IRepository<T> where T : BaseEntity
     {
-        // TODO: to protected
-        public IEnumerable<T> Data { get; set; }
+        protected IEnumerable<T> Data { get; set; }
 
         public InMemoryRepository(IEnumerable<T> data)
         {
@@ -42,30 +41,17 @@ namespace PromoCodeFactory.DataAccess.Repositories
         }
         public async Task UpdateAsync(T entity)
         {
-            // await Task.FromResult(() =>
-            // {
-            // var item = Data.FirstOrDefault(x => x.Id == entity.Id);
-            //
-            // Data.ToList().ForEach(d => Console.WriteLine($"UpdateAsync 1: {d.Id}"));
-            //
             var preliminaryCollecition = Data.ToList();
             var item = preliminaryCollecition.FirstOrDefault(x => x.Id == entity.Id);
             await Task.FromResult(preliminaryCollecition.Remove(item));
             Data = preliminaryCollecition;
             Data = await Task.FromResult(Data.Append(entity));
-            // Data.ToList().Remove(item);
-            // Data = Data.Append(entity);
-            //
-            // Data.ToList().ForEach(d => Console.WriteLine($"UpdateAsync 2: {d.Id}"));
-            //
-            // });
             return;
         }
         public async Task DeleteAsync(T entity)
         {
             var item = Data.FirstOrDefault(x => x.Id == entity.Id);
             var preliminaryCollection = Data.ToList();
-            // var item = preliminaryCollection.FirstOrDefault(x => x.Id == entity.Id);
             await Task.FromResult(preliminaryCollection.Remove(item));
             Data = preliminaryCollection;
             return;
