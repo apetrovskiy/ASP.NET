@@ -19,11 +19,15 @@ Content-Type: application/json
   "appliedPromocodesCount": {{$randomInt 0 100}}
 }
 
+?? status == 201
+
 >>! ./employeeCreationAndDeletionResult.json
 
 ### GetEmployeeByIdAsync - получение сотрудника
 GET {{baseUrl}}/{{created.id}}
 Accept: application/json
+
+?? status == 200
 
 >> ./employeeCreationAndDeletionResult.json
 
@@ -31,10 +35,14 @@ Accept: application/json
 DELETE {{baseUrl}}/{{created.id}}
 Accept: application/json
 
+?? status == 204
+
 >> ./employeeCreationAndDeletionResult.json
 
 ### GetEmployeeByIdAsync - получение сотрудника
 GET {{baseUrl}}/{{created.id}}
 Accept: application/json
+
+?? status == 404
 
 >> ./employeeCreationAndDeletionResult.json

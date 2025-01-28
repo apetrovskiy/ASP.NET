@@ -106,7 +106,6 @@ namespace PromoCodeFactory.WebHost.Controllers
         public async Task<ActionResult<EmployeeResponse>> EditEmployeeByIdAsync([FromRoute] Guid id, [FromBody] CreateOrEditEmployeeRequest request)
         {
             var employee = await _employeeRepository.GetByIdAsync(id);
-            if (null == employee) return NotFound();
             List<string> requestRoleNames = [.. request.Roles.Select(r => r.Name)];
             var allRoles = await _roleRepository.GetAllAsync();
             var roles = await _roleRepository.GetRangeByIdsAsync(allRoles.ToList().Where(r => requestRoleNames.Contains(r.Name)).Select(r => r.Id).ToList());

@@ -19,10 +19,14 @@ Content-Type: application/json
   "appliedPromocodesCount": {{$randomInt 0 100}}
 }
 
+?? status == 201
+
 >>! ./employeeCreationResult.json
 
 ### GetEmployeeByIdAsync - получение сотрудника
 GET {{baseUrl}}/{{created.id}}
 Accept: application/json
+
+?? status == 200
 
 >> ./employeeCreationResult.json
