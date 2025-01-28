@@ -21,8 +21,8 @@ public class EmployeeMapper
         employee.FirstName = model.FirstName;
         employee.LastName = model.LastName;
         employee.Email = model.Email;
-        // TODO: employee.Roles = roles.Select(x => new Role { Id = x.Id, Name = x.Name, Description = x.Description }).ToList();
-        // TODOЖ employee.AppliedPromocodesCount = model.AppliedPromocodesCount;
+        employee.Roles = roles.Select(x => new Role { Id = x.Id, Name = x.Name, Description = x.Description }).ToList();
+        employee.AppliedPromocodesCount = model.AppliedPromocodesCount;
         return employee;
     }
 }

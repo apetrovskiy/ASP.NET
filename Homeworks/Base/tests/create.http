@@ -1,8 +1,6 @@
 @baseUrl = http://localhost:5000/api/v1/employees
 # @import ./variables.http
 
-@adminRoleId = 53729686-a368-4eeb-8bfa-cc69b6050d02
-
 ### CreateEmployeeAsync - создание сотрудника
 # @name created
 POST {{baseUrl}}
@@ -12,14 +10,19 @@ Content-Type: application/json
 {
   "firstName": "First{{$randomInt 100 999}}",
   "lastName": "Last{{$randomInt 100 999}}",
-  "email": "user{{$randomInt 100 999}}@yandex.ru"
+  "email": "user{{$randomInt 100 999}}@yandex.ru",
+  "roles" : [
+    {
+      "name": "Admin"
+    }
+  ],
+  "appliedPromocodesCount": {{$randomInt 0 100}}
 }
 
 >>! ./employeeCreationResult.json
 
 ### GetEmployeeByIdAsync - получение сотрудника
-GET {{baseUrl}}/{{created}}
+GET {{baseUrl}}/{{created.id}}
 Accept: application/json
-Content-Type: application/json
 
 >> ./employeeCreationResult.json

@@ -1,8 +1,6 @@
 @baseUrl = http://localhost:5000/api/v1/employees
 # @import ./variables.http
 
-@partnerManagerRoleId = b0ae7aac-5493-45cd-ad16-87426a5e7665
-
 ### CreateEmployeeAsync - создание сотрудника
 # @name created
 POST {{baseUrl}}
@@ -12,27 +10,38 @@ Content-Type: application/json
 {
   "firstName": "First{{$randomInt 100 999}}",
   "lastName": "Last{{$randomInt 100 999}}",
-  "email": "user{{$randomInt 100 999}}@yandex.ru"
+  "email": "user{{$randomInt 100 999}}@yandex.ru",
+  "roles" : [
+    {
+      "name": "Admin"
+    }
+  ],
+  "appliedPromocodesCount": {{$randomInt 0 100}}
 }
 
 >>! ./employeeAltertionResult.json
 
 ### EditEmployeeByIdAsync - изменение сотрудника
-PUT {{baseUrl}}/{{created}}
+PUT {{baseUrl}}/{{created.id}}
 Accept: application/json
 Content-Type: application/json
 
 {
   "firstName": "First{{$randomInt 100 999}}",
   "lastName": "Last{{$randomInt 100 999}}",
-  "email": "user{{$randomInt 100 999}}@yandex.ru"
-  "appliedPromocodesCount": "${{$randomInt 100 999}}"
+  "email": "user{{$randomInt 100 999}}@yandex.ru",
+  "roles" : [
+    {
+      "name": "PartnerManager"
+    }
+  ],
+  "appliedPromocodesCount": {{$randomInt 0 100}}
 }
 
 >> ./employeeAltertionResult.json
 
 ### GetEmployeeByIdAsync - получение сотрудника
-GET {{baseUrl}}/{{created}}
+GET {{baseUrl}}/{{created.id}}
 Accept: application/json
 
 >> ./employeeAltertionResult.json

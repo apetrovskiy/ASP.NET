@@ -104,34 +104,24 @@ namespace PromoCodeFactory.WebHost.Controllers
 
             // Console.WriteLine($"POST input {request.FirstName}, {request.LastName}, {request.Email}");
             // Employee employee = new() { Id = Guid.Parse("451533d5-d8d5-4a11-9c7b-eb9f14e1a32f"), FirstName = request.FirstName, LastName = request.LastName, Email = request.Email, Roles = roles.ToList() };
-            var employee = EmployeeMapper.MapFromModel(request, []); // TODO: , roles);
+            List<string> requestRoleNames = [.. request.Roles.Select(r => r.Name)];
+            var allRoles = await _roleRepository.GetAllAsync();
+            var roles = await _roleRepository.GetRangeByIdsAsync(allRoles.ToList().Where(r => requestRoleNames.Contains(r.Name)).Select(r => r.Id).ToList());
+            var employee = EmployeeMapper.MapFromModel(model: request, roles: roles);
             Console.WriteLine($"id={employee.Id}, first={employee.FirstName}, last={employee.LastName}, email={employee.Email}");
             //, Roles = request.Roles.Select(role => new Role() { Name = role.Name, Description = role.Description }) };
             await _employeeRepository.AddAsync(employee);
-
-            // var result1 = CreatedAtAction(nameof(GetEmployeeByIdAsync), nameof(EmployeesController), new { Id = employee.Id.ToString() }, employee.Id.ToString());
-            // Console.WriteLine($"{result1.ActionName}, {result1.ControllerName}, {result1.RouteValues}, {result1.Value}");
-            // var result2 = CreatedAtAction("GetEmployeeById", new { id = employee.Id }, employee.Id);
-            // Console.WriteLine($"{result2.ActionName}, {result2.ControllerName}, {result2.RouteValues}, {result2.Value}");
-
-            // Console.WriteLine("probably, before the failure !!!!!!!!!!!!!!!!!!!!!");
-            //
-            // return CreatedAtAction(nameof(GetEmployeeByIdAsync), new { id = Guid.Parse(employee.Id.ToString()) }, Guid.Parse(employee.Id.ToString()));
-            // TODO: is working
-            // return CreatedAtAction("GetEmployeeById", new { id = Guid.Parse(employee.Id.ToString()) }, Guid.Parse(employee.Id.ToString()));
-            // TODO: is working
-            // return CreatedAtAction("GetEmployeeById", new { id = employee.Id.ToString() }, employee.Id.ToString());
-            // TODO: is working
-            return CreatedAtAction("GetEmployeeById", new { id = employee.Id }, employee.Id);
+            return CreatedAtAction("GetEmployeeById", new { id = employee.Id }, employee);
         }
 
-                /// <summary>
+        /// <summary>
         /// Обновить работника
         /// </summary>
         /// <param name="id">Id работника, например <example>a6c8c6b1-4349-45b0-ab31-244740aaf0f0</example></param>
         /// <param name="request">Данные запроса></param>
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> EditEmployeeByIdAsync(Guid id, CreateOrEditCustomerRequest request)
+        // public async Task<IActionResult> EditEmployeeByIdAsync([FromRoute] Guid id, [FromBody] CreateOrEditEmployeeRequest request)
+        public async Task<ActionResult<EmployeeResponse>> EditEmployeeByIdAsync([FromRoute] Guid id, [FromBody] CreateOrEditEmployeeRequest request)
         {
             /*
             var customer = await _customerRepository.GetByIdAsync(id);
@@ -147,6 +137,14 @@ namespace PromoCodeFactory.WebHost.Controllers
 
             return NoContent();
             */
+            var employee = await _employeeRepository.GetByIdAsync(id);
+            if (null == employee) return NotFound();
+            List<string> requestRoleNames = [.. request.Roles.Select(r => r.Name)];
+            var allRoles = await _roleRepository.GetAllAsync();
+            var roles = await _roleRepository.GetRangeByIdsAsync(allRoles.ToList().Where(r => requestRoleNames.Contains(r.Name)).Select(r => r.Id).ToList());
+            employee = EmployeeMapper.MapFromModel(model: request, roles: roles, employee: employee);
+            await _employeeRepository.UpdateAsync(employee);
+            return CreatedAtAction("GetEmployeeById", new { id = employee.Id }, employee);
         }
 
         /// <summary>
