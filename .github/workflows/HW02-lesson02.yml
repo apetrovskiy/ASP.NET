@@ -47,7 +47,7 @@ jobs:
           cd "${WORK_DIR}"
           dotnet run --project "${MAIN_PROJECT}" & \
             { \
-              sleep 1m; \
+              sleep 20s; \
               httpyac send --all --insecure --output body tests/read.http; \
               httpyac send --all --insecure --output body tests/create.http; \
               httpyac send --all --insecure --output body tests/update.http; \
