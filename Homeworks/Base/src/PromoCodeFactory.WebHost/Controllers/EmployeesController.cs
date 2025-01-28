@@ -55,17 +55,11 @@ namespace PromoCodeFactory.WebHost.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<EmployeeResponse>> GetEmployeeByIdAsync([FromRoute] Guid id)
         {
-            //
-            Console.WriteLine($"GetEmployeeByIdAsync guid 0001 {id}");
-            //
             var employee = await _employeeRepository.GetByIdAsync(id);
 
 
             if (employee == null)
                 return NotFound();
-            //
-            Console.WriteLine($"GetEmployeeByIdAsync guid 0002 {employee.Id}, {employee.FirstName}, {employee.LastName}, {employee.Email}");
-            //
 
             var employeeModel = new EmployeeResponse()
             {
@@ -108,40 +102,19 @@ namespace PromoCodeFactory.WebHost.Controllers
 
             // return CreatedAtAction(nameof(GetCustomerAsync), new { id = customer.Id }, customer.Id);
 
-            Console.WriteLine($"POST input {request.FirstName}, {request.LastName}, {request.Email}");
+            // Console.WriteLine($"POST input {request.FirstName}, {request.LastName}, {request.Email}");
             // Employee employee = new() { Id = Guid.Parse("451533d5-d8d5-4a11-9c7b-eb9f14e1a32f"), FirstName = request.FirstName, LastName = request.LastName, Email = request.Email, Roles = roles.ToList() };
             var employee = EmployeeMapper.MapFromModel(request, []); // TODO: , roles);
             Console.WriteLine($"id={employee.Id}, first={employee.FirstName}, last={employee.LastName}, email={employee.Email}");
             //, Roles = request.Roles.Select(role => new Role() { Name = role.Name, Description = role.Description }) };
             await _employeeRepository.AddAsync(employee);
-            // //
-            // Console.WriteLine($"new id = employee.Id = {new { id = employee.Id }}");
-            // //
-            // try
-            // {
-            //     Console.WriteLine($"GetByIdAsync(employee.Id); {employee.Id}");
-            //     (_employeeRepository as InMemoryRepository<Employee>).Data.ToList().ForEach(d => Console.WriteLine($"data item: {d.Id}, {d.Email}"));
-            //     var saved = await _employeeRepository.GetByIdAsync(employee.Id);
-            //     Console.WriteLine($"before?");
-            //     Console.WriteLine($"null == saved {null == saved}");
-            //     if (null != saved)
-            //     {
-            //         Console.WriteLine($"saved.Id {saved.Id}");
-            //         Console.WriteLine($"saved.FullName {saved.FullName}");
-            //         Console.WriteLine($"saved.Email {saved.Email}");
-            //         Console.WriteLine($"CreateEmployeeAsync -> GetEmployeeByIdAsync: {saved.Id}, {saved.FullName}, {saved.Email}");
-            //     }
-            // }
-            // catch (Exception e)
-            // {
-            //     Console.WriteLine($"{e.Message}; {e.StackTrace}");
-            // }
-            var result1 = CreatedAtAction(nameof(GetEmployeeByIdAsync), nameof(EmployeesController), new { Id = employee.Id.ToString() }, employee.Id.ToString());
-            Console.WriteLine($"{result1.ActionName}, {result1.ControllerName}, {result1.RouteValues}, {result1.Value}");
-            var result2 = CreatedAtAction("GetEmployeeById", new { id = employee.Id }, employee.Id);
-            Console.WriteLine($"{result2.ActionName}, {result2.ControllerName}, {result2.RouteValues}, {result2.Value}");
 
-            Console.WriteLine("probably, before the failure !!!!!!!!!!!!!!!!!!!!!");
+            // var result1 = CreatedAtAction(nameof(GetEmployeeByIdAsync), nameof(EmployeesController), new { Id = employee.Id.ToString() }, employee.Id.ToString());
+            // Console.WriteLine($"{result1.ActionName}, {result1.ControllerName}, {result1.RouteValues}, {result1.Value}");
+            // var result2 = CreatedAtAction("GetEmployeeById", new { id = employee.Id }, employee.Id);
+            // Console.WriteLine($"{result2.ActionName}, {result2.ControllerName}, {result2.RouteValues}, {result2.Value}");
+
+            // Console.WriteLine("probably, before the failure !!!!!!!!!!!!!!!!!!!!!");
             //
             // return CreatedAtAction(nameof(GetEmployeeByIdAsync), new { id = Guid.Parse(employee.Id.ToString()) }, Guid.Parse(employee.Id.ToString()));
             // TODO: is working
