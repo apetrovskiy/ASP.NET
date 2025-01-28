@@ -19,8 +19,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Installing curl
-        run: sudo apt update && sudo apt install curl
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
@@ -32,10 +30,6 @@ jobs:
       - run: |
           npm install -g httpyac
           httpyac --version
-          #
-          hostname
-          #
-          # sleep 2m
       - name: Checking code
         run: |
           cd "${WORK_DIR}"
@@ -50,9 +44,6 @@ jobs:
           dotnet build --no-restore "${SOLUTION_FILE}"
       - name: Running the service and checking the result
         run: |
-          #
-          hostname
-          #
           cd "${WORK_DIR}"
           dotnet run --project "${MAIN_PROJECT}" & \
             { \
