@@ -125,6 +125,30 @@ namespace PromoCodeFactory.WebHost.Controllers
             return CreatedAtAction("GetEmployeeById", new { id = employee.Id }, employee.Id);
         }
 
+                /// <summary>
+        /// Обновить работника
+        /// </summary>
+        /// <param name="id">Id работника, например <example>a6c8c6b1-4349-45b0-ab31-244740aaf0f0</example></param>
+        /// <param name="request">Данные запроса></param>
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> EditEmployeeByIdAsync(Guid id, CreateOrEditCustomerRequest request)
+        {
+            /*
+            var customer = await _customerRepository.GetByIdAsync(id);
+
+            if (customer == null)
+                return NotFound();
+
+            var preferences = await _preferenceRepository.GetRangeByIdsAsync(request.PreferenceIds);
+
+            CustomerMapper.MapFromModel(request, preferences, customer);
+
+            await _customerRepository.UpdateAsync(customer);
+
+            return NoContent();
+            */
+        }
+
         /// <summary>
         /// Удалить работника
         /// </summary>

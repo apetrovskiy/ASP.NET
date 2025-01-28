@@ -1,48 +1,38 @@
 @baseUrl = http://localhost:5000/api/v1/employees
 # @import ./variables.http
 
-@employeeToUpdateId = 991876d5-c8e7-4a11-9c7b-cd9a54e4c32f
 @partnerManagerRoleId = b0ae7aac-5493-45cd-ad16-87426a5e7665
 
 ### CreateEmployeeAsync - создание сотрудника
+# @name created
 POST {{baseUrl}}
 Accept: application/json
 Content-Type: application/json
 
 {
-  "firstName": "string",
-  "lastName": "string",
-  "email": "string",
-  "roles": [
-    {
-      "id": {{partnerManagerRoleId}},
-      "name": "string",
-      "description": "string"
-    }
-  ],
-  "appliedPromocodesCount": 0
+  "firstName": "First{{$randomInt 100 999}}",
+  "lastName": "Last{{$randomInt 100 999}}",
+  "email": "user{{$randomInt 100 999}}@yandex.ru"
 }
 
-### TODO: - изменение сотрудника
-PUT {{baseUrl}}/{{employeeToUpdateId}}
+>>! ./employeeAltertionResult.json
+
+### EditEmployeeByIdAsync - изменение сотрудника
+PUT {{baseUrl}}/{{created}}
 Accept: application/json
 Content-Type: application/json
 
 {
-  "id": {{employeeToUpdateId}},
-  "firstName": "string",
-  "lastName": "string",
-  "email": "new email",
-  "roles": [
-    {
-      "id": "string",
-      "name": "string",
-      "description": "string"
-    }
-  ],
-  "appliedPromocodesCount": 0
+  "firstName": "First{{$randomInt 100 999}}",
+  "lastName": "Last{{$randomInt 100 999}}",
+  "email": "user{{$randomInt 100 999}}@yandex.ru"
+  "appliedPromocodesCount": "${{$randomInt 100 999}}"
 }
 
+>> ./employeeAltertionResult.json
+
 ### GetEmployeeByIdAsync - получение сотрудника
-GET {{baseUrl}}/{{employeeToUpdateId}}
+GET {{baseUrl}}/{{created}}
 Accept: application/json
+
+>> ./employeeAltertionResult.json
