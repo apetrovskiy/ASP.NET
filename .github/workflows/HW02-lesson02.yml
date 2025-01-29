@@ -1,0 +1,57 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: ASP.NET Core HW 02 for lesson 02
+
+on:
+  pull_request:
+    branches: ["develop"]
+  workflow_dispatch:
+
+env:
+  WORK_DIR: Homeworks/Base
+  SOLUTION_FILE: src/PromoCodeFactory.sln
+  MAIN_PROJECT: src/PromoCodeFactory.WebHost/PromoCodeFactory.WebHost.csproj
+
+jobs:
+  service:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      - run: |
+          npm install -g httpyac
+          httpyac --version
+      - name: Checking code
+        run: |
+          cd "${WORK_DIR}"
+          dotnet format --verify-no-changes -v d "${SOLUTION_FILE}"
+      - name: Restore dependencies
+        run: |
+          cd "${WORK_DIR}"
+          dotnet restore "${SOLUTION_FILE}"
+      - name: Build
+        run: |
+          cd "${WORK_DIR}"
+          dotnet build --no-restore "${SOLUTION_FILE}"
+      - name: Running the service and checking the result
+        run: |
+          cd "${WORK_DIR}"
+          dotnet run --project "${MAIN_PROJECT}" & \
+            { \
+              sleep 20s; \
+              httpyac send --all --insecure --output body tests/read.http; \
+              httpyac send --all --insecure --output body tests/create.http; \
+              httpyac send --all --insecure --output body tests/update.http; \
+              httpyac send --all --insecure --output body tests/delete.http; \
+            }
+      - name: Stopping the service
+        run: pkill dotnet

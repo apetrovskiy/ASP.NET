@@ -1,0 +1,91 @@
+@baseUrl = http://localhost:5000/api/v1/employees
+# @import ./variables.http
+
+### CreateEmployeeAsync - создание сотрудника
+# @name created
+POST {{baseUrl}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "firstName": "First{{$randomInt 100 999}}",
+  "lastName": "Last{{$randomInt 100 999}}",
+  "email": "user{{$randomInt 100 999}}@yandex.ru",
+  "roles" : [
+    {
+      "name": "Admin"
+    }
+  ],
+  "appliedPromocodesCount": {{$randomInt 0 100}}
+}
+
+?? status == 201
+
+>>! ./employeeAltertionResult.json
+
+### GetEmployeeByIdAsync - получение сотрудника
+GET {{baseUrl}}/{{created.id}}
+Accept: application/json
+
+?? status == 200
+
+>> ./employeeAltertionResult.json
+
+### EditEmployeeByIdAsync - изменение сотрудника
+PUT {{baseUrl}}/{{created.id}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "firstName": "First{{$randomInt 100 999}}",
+  "lastName": "Last{{$randomInt 100 999}}",
+  "email": "user{{$randomInt 100 999}}@yandex.ru",
+  "roles" : [
+    {
+      "name": "PartnerManager"
+    }
+  ],
+  "appliedPromocodesCount": {{$randomInt 0 100}}
+}
+
+?? status == 201
+
+>> ./employeeAltertionResult.json
+
+### GetEmployeeByIdAsync - получение сотрудника
+GET {{baseUrl}}/{{created.id}}
+Accept: application/json
+
+?? status == 200
+
+>> ./employeeAltertionResult.json
+
+### EditEmployeeByIdAsync - создание нового сотрудника
+# @name createdByPut
+PUT {{baseUrl}}/{{$guid}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "firstName": "First{{$randomInt 100 999}}",
+  "lastName": "Last{{$randomInt 100 999}}",
+  "email": "user{{$randomInt 100 999}}@yandex.ru",
+  "roles" : [
+    {
+      "name": "PartnerManager"
+    }
+  ],
+  "appliedPromocodesCount": {{$randomInt 0 100}}
+}
+
+?? status == 201
+
+>> ./employeeAltertionResult.json
+
+### GetEmployeeByIdAsync - получение сотрудника
+GET {{baseUrl}}/{{createdByPut.id}}
+Accept: application/json
+
+?? status == 200
+
+>> ./employeeAltertionResult.json

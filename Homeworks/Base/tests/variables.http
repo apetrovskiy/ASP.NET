@@ -1,0 +1,2 @@
+@baseUrl = http://localhost:5000/api/v1/employees
+@swaggerUrl = http://localhost:5000/swagger/index.html
